@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.8">
+    <title>Gemini Vision</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@3.1.0/dist/full.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" media="print" onload="this.media='all'">
+    <link rel="shortcut icon" href="https://www.gstatic.com/lamda/images/gemini_sparkle_v002_d4735304ff6292a690345.svg">
+    <meta name="description" content="Gemini Vision - Your AI-powered video chat application">
+<meta property="og:title" content="Gemini Vision | Gemini | Ai | vision | chathpt | chat gpt | video chat |chat| video | ">
+<meta name="google-site-verification" content="8rrt3wxzxIgn69ziAY8DH8_kPzt-1WsF4IG0YQ0rlUM" />
+<meta property="og:description" content="Experience AI-powered video chat with Gemini Vision">
+<meta property="og:image" content="https://www.gstatic.com/lamda/images/gemini_sparkle_v002_d4735304ff6292a690345.svg">
+<meta property="og:url" content="https://geminiwithvision.pythonanywhere.com/">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/annyang/2.6.1/annyang.min.js"></script>
+
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <nav class="navbar bg-base-100">
+        <div class="flex-1 items-baseline ">
+            <h1 class="text-4xl font-bold p-4">Gemini</h1>
+            <h2 class="text-3xl text-white/70 font-medium">Vision</h2>
+        </div>
+    </nav>
+    <main id="app-container" class="flex-grow container mx-auto p-4 flex flex-col">
+        <div id="video-chat-container" class="flex-grow flex flex-col lg:flex-row gap-4">
+            <div id="video-container" class="flex-grow relative rounded-lg overflow-hidden">
+                <canvas id="ambientCanvas" class="absolute inset-0 w-full h-full"></canvas>
+                <video id="localVideo" style="transform: rotateY(-180deg);" class="w-full h-full object-cover" autoplay muted playsinline></video>
+                <button id="fullscreen-video-btn" class="btn btn-circle btn-primary absolute top-2 right-2 z-10">
+                    <i class="fas fa-expand"></i>
+                </button>
+            </div>
+            <div id="chat-container" class="w-full lg:w-1/3 flex flex-col bg-base-200 rounded-lg relative">
+                <div id="chat-messages" class="flex-grow overflow-y-auto p-4 space-y-4">
+                    <div class="chat-message gemini">Hey there! What can I do for you today? 👋</div>
+                </div>
+                <div id="chat-input-container" class="p-4 bg-base-300 rounded-b-lg debate">
+                    <div class="flex items-center">
+                        <input id="text-input" type="text" class="input input-bordered flex-grow mr-2" placeholder="Type your message...">
+        <button id="send-text-btn" style="background-color: transparent; background-image: linear-gradient(45deg,#3367d6,#C0C0C0); background-size: 200%;" class="btn"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+                <button id="fullscreen-chat-btn" class="btn btn-circle btn-primary absolute top-2 right-2 z-10">
+                    <i class="fas fa-expand"></i>
+                </button>
+            </div>
+        </div>
+        <div id="controls-container" class="flex justify-center items-center gap-4 py-4">
+            <button id="toggle-video-btn" class="btn btn-circle btn-primary enabled"><i class="fas fa-video"></i></button>
+            <button id="toggle-audio-btn" class="btn btn-circle btn-primary enabled"><i class="fas fa-microphone"></i></button>
+            <button id="start-stop-btn" class="btn btn-circle btn-success mainbtn"><i class="fas fa-play"></i></button>
+            <button id="share-screen-btn" class="btn btn-circle btn-primary disabled"><i class="fas fa-desktop"></i></button>
+        </div>
+    </main>
+    <script src="/static/script.js"></script>
+</body>
+</html>

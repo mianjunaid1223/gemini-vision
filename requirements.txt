@@ -1,0 +1,4 @@
+Flask
+Flask-SocketIO
+google-generative-ai
+python-dotenv
