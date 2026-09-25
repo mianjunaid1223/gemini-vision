@@ -1,5 +1,8 @@
 # Gemini Vision: Real-Time Multimodal Video and Audio AI Assistant
 
+[![Year Built](https://img.shields.io/badge/Year%20Built-2024-blue.svg)](#)
+
+
 Real-time browser-based computer vision and voice conversation assistant integrating Google Gemini multimodal APIs, WebRTC webcam capture, display surface capture, and Web Speech synthesis.
 
 ```
