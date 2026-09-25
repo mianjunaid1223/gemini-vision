@@ -1,133 +1,55 @@
-# Gemini Vision: Interactive Multimodal AI Video Assistant
+# Gemini Vision: Real-Time Multimodal Video and Audio AI Assistant
 
-Gemini Vision is a full-stack real-time multimodal web application that connects browser camera and screen sharing feeds to Google Gemini 1.5 Flash. Users interact with the assistant in natural spoken or text conversation while sharing their live webcam view or desktop screen, creating a face-to-face AI assistance experience.
-
----
-
-## Architectural Flow
+Real-time browser-based computer vision and voice conversation assistant integrating Google Gemini multimodal APIs, WebRTC webcam capture, display surface capture, and Web Speech synthesis.
 
 ```
-+-----------------------+      +---------------------------+      +--------------------------+
-|  User Browser Client  | ---> |   Flask Application Layer | ---> | Google Gemini 1.5 Flash  |
-| - Webcam / Screen API |      | - Base64 Image Decode     |      | - Multimodal Processing  |
-| - Speech Recognition  |      | - Temp File Lifecycle     |      | - Friendly Conversational|
-| - Audio Synthesis     |      | - Error Handling          |      |   System Instructions    |
-+-----------------------+      +---------------------------+      +--------------------------+
++-----------------------------------------------------------------------------------------+
+|                                    Client Viewport                                      |
+|                                                                                         |
+|   +-----------------------------------+   +-----------------------------------------+   |
+|   | MediaDevices Video Stream         |   | Web Speech API Recognition              |   |
+|   | navigator.mediaDevices.getUserMedia|   | Continuous voice command transcription  |   |
+|   | HTML5 Canvas frame snapshotting   |   | SpeechSynthesis vocal responses         |   |
+|   +-----------------+-----------------+   +--------------------+--------------------+   |
+|                     |                                          |                        |
+|                     +---------------------+--------------------+                        |
+|                                           |                                             |
+|                                           v                                             |
+|   +---------------------------------------------------------------------------------+   |
+|   | REST / WebSocket Bridge: Frame serialization (image/jpeg base64) + user prompt  |   |
+|   +---------------------------------------|-----------------------------------------+   |
++-------------------------------------------|---------------------------------------------+
+                                            v
++-----------------------------------------------------------------------------------------+
+|                                Flask Processing Gateway                                 |
+|                                                                                         |
+|   +---------------------------------------------------------------------------------+   |
+|   | Google Generative AI (Gemini 1.5 Pro / Flash Multimodal)                        |   |
+|   | Visual reasoning, scene transcription, conversational dialogue synthesis        |   |
+|   +---------------------------------------------------------------------------------+   |
++-----------------------------------------------------------------------------------------+
 ```
 
----
+## System Architecture
 
-## Key Capabilities & Technical Features
+Gemini Vision implements an interactive conversational assistant capable of seeing and conversing with users in real time. The frontend extracts periodic visual frames from the user webcam or desktop screen share, pairs the imagery with speech-recognized audio prompts, and submits multimodal payloads to Google Gemini models.
 
-1. Real-Time Multimodal Interaction:
-   - Captures high-frequency frames from webcams or screen sharing sessions via the HTML5 `MediaDevices` API.
-   - Serializes visual frames as base64 JPEG data and transmits payloads to the backend alongside conversational text.
+### Subsystem Breakdown
 
-2. Speech Recognition & Voice Synthesis:
-   - Implements browser-native Web Speech API for voice dictation and hands-free spoken queries.
-   - Synthesizes Gemini text responses into audio speech for fluid, conversational interaction.
+1. Visual Capture Pipeline: Accesses user camera or screen streams through navigator.mediaDevices.getUserMedia and getDisplayMedia. Draws active video frames into hidden HTML5 Canvas elements and exports JPEG base64 payloads.
 
-3. Context-Aware Visual Analysis:
-   - Analyzes real-world objects, code on screen, diagrams, and written documents in real time.
-   - Backed by system instructions tailored for direct, peer-to-peer dialogue without artificial video call formalities.
+2. Voice Recognition and Audio Synthesis: Uses the browser Web Speech API (webkitSpeechRecognition) for hands-free audio command capture and synthesizes AI responses into audible speech using window.speechSynthesis.
 
-4. Responsive Layouts:
-   - Dedicated desktop workspace (`template/index.html`) featuring split-screen video feeds and conversation logs.
-   - Optimized mobile layout (`template/mobile.html`) delivering touch-first controls on phone and tablet browsers.
+3. Multimodal Analysis Gateway: Flask server routes images and contextual prompt histories to the Gemini API, returning concise real-time answers.
 
----
+## Local Installation
 
-## Technical Stack
-
-- Backend Framework: Flask, Werkzeug
-- Multimodal AI Model: Google Generative AI SDK (`gemini-1.5-flash`)
-- Real-Time Communication: Flask-SocketIO / HTTP REST Endpoints
-- Client Technologies: Vanilla JavaScript, HTML5 Canvas, MediaStream API, Web Speech API
-- Configuration: `python-dotenv`
-
----
-
-## Environment Configuration
-
-Create a `.env` file in the project root:
-
-```env
-# Google Gemini API Access
-gemini_api_key=your_gemini_api_key_here
-
-# Flask Session Security
-SECRET_KEY=your_secret_session_key_here
-```
-
----
-
-## Installation & Setup
-
-### Prerequisites
-- Python 3.9 or higher
-- Modern web browser (Chrome, Edge, or Safari) with camera and microphone permissions enabled
-- Valid Google Gemini API key
-
-### Execution Steps
-
-1. Clone repository:
-   ```bash
-   git clone https://github.com/mianjunaid1223/gemini-vision.git
-   cd gemini-vision
-   ```
-
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. Launch server:
-   ```bash
-   python main.py
-   ```
-
-4. Open `http://127.0.0.1:5000` in your web browser. Grant camera and microphone permissions when prompted.
-
----
-
-## API Reference
-
-### 1. Web View Entry Point
-- Method: `GET`
-- Endpoint: `/`
-- Description: Detects user agent and renders desktop (`index.html`) or mobile (`mobile.html`) interface.
-
-### 2. Message & Frame Processing
-- Method: `POST`
-- Endpoint: `/message`
-- Request Body (JSON):
-  ```json
-  {
-    "input": "Can you explain what is displayed on my screen?",
-    "isSpeech": true,
-    "image": "data:image/jpeg;base64,...",
-    "screen": null
-  }
-  ```
-- Response (200 OK):
-  ```json
-  {
-    "text": "You are looking at a Python Flask application configuring routing endpoints..."
-  }
-  ```
-
----
-
-## Project Structure
-
-```
-gemini-vision/
-|-- main.py              # Flask server, route controllers, and Gemini multimodal calls
-|-- requirements.txt     # Python package requirements
-|-- template/
-|   |-- index.html       # Desktop interface with video feed and chat drawer
-|   |-- mobile.html      # Responsive mobile view
-|-- static/
-|   |-- index.css        # Dashboard styling and video feed overlays
-|   |-- script.js        # Media stream capture, base64 encoding, and audio synthesis
+```bash
+git clone https://github.com/mianjunaid1223/gemini-vision.git
+cd gemini-vision
+python -m venv venv
+source venv/bin/activate  # On Windows: .\venv\Scripts\activate
+pip install flask google-generativeai python-dotenv
+export GEMINI_API_KEY="your-api-key"
+python app.py
 ```
